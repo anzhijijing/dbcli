@@ -1,0 +1,43 @@
+[
+  {
+    "name": "java.lang.Boolean",
+    "methods": [{"name": "getBoolean", "parameterTypes": ["java.lang.String"]}]
+  },
+  {
+    "name": "java.lang.String",
+    "methods": [
+      {"name": "getBytes", "parameterTypes": []},
+      {"name": "getBytes", "parameterTypes": ["java.lang.String"]},
+      {"name": "newString", "parameterTypes": ["byte[]"]},
+      {"name": "newString", "parameterTypes": ["byte[]", "java.lang.String"]}
+    ]
+  },
+  {
+    "name": "sun.nio.cs.UTF_8",
+    "methods": [{"name": "<init>", "parameterTypes": []}]
+  },
+  {
+    "name": "sun.nio.cs.ext.GBK",
+    "methods": [{"name": "<init>", "parameterTypes": []}]
+  },
+  {
+    "name": "sun.nio.cs.ext.GB18030",
+    "methods": [{"name": "<init>", "parameterTypes": []}]
+  },
+  {
+    "name": "sun.nio.cs.ext.EUC_KR",
+    "methods": [{"name": "<init>", "parameterTypes": []}]
+  },
+  {
+    "name": "java.nio.charset.Charset",
+    "methods": [
+      {"name": "forName", "parameterTypes": ["java.lang.String"]},
+      {"name": "defaultCharset", "parameterTypes": []}
+    ]
+  },
+  {
+    "name": "java.nio.charset.StandardCharsets",
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true
+  }
+]
