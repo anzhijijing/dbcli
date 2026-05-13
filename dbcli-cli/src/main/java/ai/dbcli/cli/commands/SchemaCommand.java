@@ -3,6 +3,7 @@ package ai.dbcli.cli.commands;
 import ai.dbcli.cli.DbCli;
 import ai.dbcli.core.*;
 import ai.dbcli.dialect.SchemaMeta;
+import ai.dbcli.jdbc.DatasourceConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -77,13 +78,51 @@ public class SchemaCommand implements Runnable {
             try {
                 String[] parts = parsePath(path, 2);
                 String datasource = parts[0];
-                String schema = parts[1];
-                
+                String schemaName = parts[1];
+
                 MetadataEngine engine = new MetadataEngine();
-                SchemaMeta meta = engine.getSchema(datasource, schema);
-                
+
+                // Check datasource exists
+                DatasourceConfig dsConfig = engine.getDatasource(datasource);
+                if (dsConfig == null) {
+                    OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
+                    if (parent.parent.getOutputFormat().equals("json")) {
+                        ObjectMapper mapper = new ObjectMapper();
+                        ApiResponse response = new ApiResponse();
+                        response.setSuccess(false);
+                        response.setErrorCode("DATASOURCE_NOT_FOUND");
+                        response.setMessage("Datasource '" + datasource + "' not found");
+                        System.out.println(mapper.writeValueAsString(response));
+                    } else {
+                        System.err.println("Datasource '" + datasource + "' not found");
+                    }
+                    return 1;
+                }
+
+                // Check schema exists
+                java.util.List<SchemaMeta> schemas = engine.listSchemas(datasource);
+                boolean schemaExists = schemas.stream()
+                    .anyMatch(s -> s.getName().equalsIgnoreCase(schemaName));
+
+                if (!schemaExists) {
+                    OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
+                    if (parent.parent.getOutputFormat().equals("json")) {
+                        ObjectMapper mapper = new ObjectMapper();
+                        ApiResponse response = new ApiResponse();
+                        response.setSuccess(false);
+                        response.setErrorCode("SCHEMA_NOT_FOUND");
+                        response.setMessage("Schema '" + schemaName + "' not found in datasource '" + datasource + "'");
+                        System.out.println(mapper.writeValueAsString(response));
+                    } else {
+                        System.err.println("Schema '" + schemaName + "' not found");
+                    }
+                    return 1;
+                }
+
+                SchemaMeta meta = engine.getSchema(datasource, schemaName);
+
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
-                
+
                 if (parent.parent.getOutputFormat().equals("json")) {
                     ObjectMapper mapper = new ObjectMapper();
                     System.out.println(mapper.writeValueAsString(formatter.success(meta)));
@@ -92,7 +131,7 @@ public class SchemaCommand implements Runnable {
                     System.out.println("Datasource: " + meta.getDatasource());
                     System.out.println("Tables: " + meta.getTableCount());
                 }
-                
+
                 return 0;
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());

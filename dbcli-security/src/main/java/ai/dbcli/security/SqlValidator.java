@@ -24,6 +24,7 @@ public class SqlValidator {
     static {
         FORBIDDEN_OPERATIONS.add("DROP DATABASE");
         FORBIDDEN_OPERATIONS.add("DROP SCHEMA");
+        FORBIDDEN_OPERATIONS.add("DROP TABLE");
         FORBIDDEN_OPERATIONS.add("TRUNCATE");
     }
 
@@ -68,9 +69,9 @@ public class SqlValidator {
         if (statement instanceof Drop) {
             Drop drop = (Drop) statement;
             String type = drop.getType();
-            if ("DATABASE".equals(type) || "SCHEMA".equals(type)) {
+            if ("DATABASE".equals(type) || "SCHEMA".equals(type) || "TABLE".equals(type)) {
                 return SqlValidateResult.invalid("FORBIDDEN_OPERATION",
-                        "DROP DATABASE/SCHEMA is not allowed");
+                        "DROP " + type + " is not allowed");
             }
             result.setSqlType("DROP");
         } else if (statement instanceof Truncate) {

@@ -723,5 +723,74 @@
 {
   "name":"sun.security.provider.SHA2$SHA256",
   "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"ai.dbcli.dialect.SchemaMeta",
+  "allDeclaredFields":true,
+  "allDeclaredConstructors":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"getDatasource","parameterTypes":[] }, {"name":"getName","parameterTypes":[] }, {"name":"getTableCount","parameterTypes":[] }, {"name":"getComment","parameterTypes":[] }, {"name":"getFullPath","parameterTypes":[] }, {"name":"setDatasource","parameterTypes":["java.lang.String"] }, {"name":"setName","parameterTypes":["java.lang.String"] }, {"name":"setTableCount","parameterTypes":["int"] }, {"name":"setComment","parameterTypes":["java.lang.String"] }, {"name":"setFullPath","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"ai.dbcli.dialect.TableMeta",
+  "allDeclaredFields":true,
+  "allDeclaredConstructors":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"getDatasource","parameterTypes":[] }, {"name":"getSchema","parameterTypes":[] }, {"name":"getTableName","parameterTypes":[] }, {"name":"getTableType","parameterTypes":[] }, {"name":"getComment","parameterTypes":[] }, {"name":"getColumns","parameterTypes":[] }, {"name":"getIndexes","parameterTypes":[] }, {"name":"getForeignKeys","parameterTypes":[] }, {"name":"getRowCount","parameterTypes":[] }, {"name":"getFullPath","parameterTypes":[] }, {"name":"setDatasource","parameterTypes":["java.lang.String"] }, {"name":"setSchema","parameterTypes":["java.lang.String"] }, {"name":"setTableName","parameterTypes":["java.lang.String"] }, {"name":"setTableType","parameterTypes":["java.lang.String"] }, {"name":"setComment","parameterTypes":["java.lang.String"] }, {"name":"setColumns","parameterTypes":["java.util.List"] }, {"name":"setIndexes","parameterTypes":["java.util.List"] }, {"name":"setForeignKeys","parameterTypes":["java.util.List"] }, {"name":"setRowCount","parameterTypes":["java.lang.Long"] }, {"name":"setFullPath","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"ai.dbcli.dialect.ColumnMeta",
+  "allDeclaredFields":true,
+  "allDeclaredConstructors":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"getName","parameterTypes":[] }, {"name":"getType","parameterTypes":[] }, {"name":"getComment","parameterTypes":[] }, {"name":"isNullable","parameterTypes":[] }, {"name":"isPrimaryKey","parameterTypes":[] }, {"name":"isUnique","parameterTypes":[] }, {"name":"getDefaultValue","parameterTypes":[] }, {"name":"getPosition","parameterTypes":[] }, {"name":"getLength","parameterTypes":[] }, {"name":"getPrecision","parameterTypes":[] }, {"name":"getScale","parameterTypes":[] }, {"name":"isAutoIncrement","parameterTypes":[] }]
+},
+{
+  "name":"ai.dbcli.dialect.IndexMeta",
+  "allDeclaredFields":true,
+  "allDeclaredConstructors":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"getName","parameterTypes":[] }, {"name":"getType","parameterTypes":[] }, {"name":"isUnique","parameterTypes":[] }, {"name":"isPrimary","parameterTypes":[] }, {"name":"getColumns","parameterTypes":[] }, {"name":"getComment","parameterTypes":[] }]
+},
+{
+  "name":"ai.dbcli.dialect.ForeignKeyMeta",
+  "allDeclaredFields":true,
+  "allDeclaredConstructors":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"getName","parameterTypes":[] }, {"name":"getColumnName","parameterTypes":[] }, {"name":"getRefSchema","parameterTypes":[] }, {"name":"getRefTable","parameterTypes":[] }, {"name":"getRefColumn","parameterTypes":[] }, {"name":"getOnDelete","parameterTypes":[] }, {"name":"getOnUpdate","parameterTypes":[] }]
+},
+{
+  "name":"ai.dbcli.dialect.TableStats",
+  "allDeclaredFields":true,
+  "allDeclaredConstructors":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"getRowCount","parameterTypes":[] }, {"name":"getDataSize","parameterTypes":[] }, {"name":"getIndexSize","parameterTypes":[] }, {"name":"getLastUpdated","parameterTypes":[] }]
+},
+{
+  "name":"ai.dbcli.dialect.SqlValidateResult",
+  "allDeclaredFields":true,
+  "allDeclaredConstructors":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"isValid","parameterTypes":[] }, {"name":"getErrorCode","parameterTypes":[] }, {"name":"getMessage","parameterTypes":[] }, {"name":"getSqlType","parameterTypes":[] }, {"name":"getWarnings","parameterTypes":[] }, {"name":"setValid","parameterTypes":["boolean"] }, {"name":"setErrorCode","parameterTypes":["java.lang.String"] }, {"name":"setMessage","parameterTypes":["java.lang.String"] }, {"name":"setSqlType","parameterTypes":["java.lang.String"] }, {"name":"setWarnings","parameterTypes":["java.util.List"] }, {"name":"addWarning","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"ai.dbcli.core.QueryResult",
+  "allDeclaredFields":true,
+  "allDeclaredConstructors":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"getSqlType","parameterTypes":[] }, {"name":"getColumns","parameterTypes":[] }, {"name":"getData","parameterTypes":[] }, {"name":"getRowCount","parameterTypes":[] }, {"name":"isLimited","parameterTypes":[] }, {"name":"getWarnings","parameterTypes":[] }, {"name":"setSqlType","parameterTypes":["java.lang.String"] }, {"name":"setColumns","parameterTypes":["java.util.List"] }, {"name":"setData","parameterTypes":["java.util.List"] }, {"name":"setRowCount","parameterTypes":["int"] }, {"name":"setLimited","parameterTypes":["boolean"] }, {"name":"setWarnings","parameterTypes":["java.util.List"] }]
+},
+{
+  "name":"ai.dbcli.core.SearchResult",
+  "allDeclaredFields":true,
+  "allDeclaredConstructors":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"getSchemas","parameterTypes":[] }, {"name":"getTables","parameterTypes":[] }, {"name":"getColumns","parameterTypes":[] }, {"name":"setSchemas","parameterTypes":["java.util.List"] }, {"name":"setTables","parameterTypes":["java.util.List"] }, {"name":"setColumns","parameterTypes":["java.util.List"] }]
+},
+{
+  "name":"ai.dbcli.core.SearchOptions",
+  "allDeclaredFields":true,
+  "allDeclaredConstructors":true,
+  "queryAllDeclaredMethods":true
 }
 ]

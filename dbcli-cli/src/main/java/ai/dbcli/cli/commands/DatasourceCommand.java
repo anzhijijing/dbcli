@@ -221,21 +221,44 @@ public class DatasourceCommand implements Runnable {
         public Integer call() {
             try {
                 MetadataEngine engine = new MetadataEngine();
-                boolean connected = engine.pingDatasource(name);
-                
+                DatasourceConfig config = engine.getDatasource(name);
+
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
-                
+
                 if (parent.parent.getOutputFormat().equals("json")) {
                     ObjectMapper mapper = new ObjectMapper();
                     ApiResponse response = new ApiResponse();
-                    response.setSuccess(connected);
-                    response.setData(connected ? "connected" : "disconnected");
+
+                    if (config == null) {
+                        response.setSuccess(false);
+                        response.setErrorCode("DATASOURCE_NOT_FOUND");
+                        response.setMessage("Datasource '" + name + "' not found");
+                        response.setData(null);
+                        System.out.println(mapper.writeValueAsString(response));
+                        return 1;
+                    }
+
+                    boolean connected = engine.pingDatasource(name);
+                    if (!connected) {
+                        response.setSuccess(false);
+                        response.setErrorCode("CONNECTION_FAILED");
+                        response.setMessage("Failed to connect to datasource '" + name + "'");
+                        response.setData("disconnected");
+                    } else {
+                        response.setSuccess(true);
+                        response.setData("connected");
+                    }
                     System.out.println(mapper.writeValueAsString(response));
+                    return connected ? 0 : 1;
                 } else {
+                    if (config == null) {
+                        System.err.println("Datasource '" + name + "' not found");
+                        return 1;
+                    }
+                    boolean connected = engine.pingDatasource(name);
                     System.out.println(connected ? "Connected" : "Not connected");
+                    return connected ? 0 : 1;
                 }
-                
-                return connected ? 0 : 1;
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
                 return 1;

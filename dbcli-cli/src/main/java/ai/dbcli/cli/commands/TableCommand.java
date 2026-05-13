@@ -3,6 +3,7 @@ package ai.dbcli.cli.commands;
 import ai.dbcli.cli.DbCli;
 import ai.dbcli.core.*;
 import ai.dbcli.dialect.*;
+import ai.dbcli.jdbc.DatasourceConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -98,12 +99,50 @@ public class TableCommand implements Runnable {
                 String datasource = parts[0];
                 String schema = parts[1];
                 String table = parts[2];
-                
+
                 MetadataEngine engine = new MetadataEngine();
+
+                // Check datasource exists
+                DatasourceConfig dsConfig = engine.getDatasource(datasource);
+                if (dsConfig == null) {
+                    OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
+                    if (parent.parent.getOutputFormat().equals("json")) {
+                        ObjectMapper mapper = new ObjectMapper();
+                        ApiResponse response = new ApiResponse();
+                        response.setSuccess(false);
+                        response.setErrorCode("DATASOURCE_NOT_FOUND");
+                        response.setMessage("Datasource '" + datasource + "' not found");
+                        System.out.println(mapper.writeValueAsString(response));
+                    } else {
+                        System.err.println("Datasource '" + datasource + "' not found");
+                    }
+                    return 1;
+                }
+
+                // Check table exists
+                java.util.List<TableMeta> tables = engine.listTables(datasource, schema, null);
+                boolean tableExists = tables.stream()
+                    .anyMatch(t -> t.getTableName().equalsIgnoreCase(table));
+
+                if (!tableExists) {
+                    OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
+                    if (parent.parent.getOutputFormat().equals("json")) {
+                        ObjectMapper mapper = new ObjectMapper();
+                        ApiResponse response = new ApiResponse();
+                        response.setSuccess(false);
+                        response.setErrorCode("TABLE_NOT_FOUND");
+                        response.setMessage("Table '" + table + "' not found in schema '" + schema + "'");
+                        System.out.println(mapper.writeValueAsString(response));
+                    } else {
+                        System.err.println("Table '" + table + "' not found");
+                    }
+                    return 1;
+                }
+
                 TableMeta meta = engine.getTable(datasource, schema, table);
-                
+
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
-                
+
                 if (parent.parent.getOutputFormat().equals("json")) {
                     ObjectMapper mapper = new ObjectMapper();
                     System.out.println(mapper.writeValueAsString(formatter.success(meta)));
@@ -114,10 +153,10 @@ public class TableCommand implements Runnable {
                     System.out.println("Comment: " + (meta.getComment() != null ? meta.getComment() : ""));
                     System.out.println();
                     System.out.println("Columns:");
-                    System.out.println(formatter.formatList(meta.getColumns(), 
+                    System.out.println(formatter.formatList(meta.getColumns(),
                         new String[]{"name", "type", "nullable", "primaryKey", "comment"}));
                 }
-                
+
                 return 0;
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
