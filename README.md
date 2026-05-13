@@ -37,10 +37,12 @@ mvn package -DskipTests
 
 ### Native Image 构建
 
-需要 GraalVM 21+：
+需要 GraalVM 21+。根据操作系统选择对应版本：
+
+#### Linux (x64)
 
 ```bash
-# 安装 GraalVM (可选)
+# 安装 GraalVM
 cd ~/.jdks
 curl -L -o graalvm.tar.gz "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_linux-x64_bin.tar.gz"
 tar -xzf graalvm.tar.gz
@@ -48,6 +50,48 @@ tar -xzf graalvm.tar.gz
 # 构建 Native Image
 JAVA_HOME=~/.jdks/graalvm-community-openjdk-21.0.2+13.1 mvn -Pnative package -DskipTests
 ```
+
+#### macOS (Intel x64)
+
+```bash
+# 安装 GraalVM
+cd ~/.jdks
+curl -L -o graalvm.tar.gz "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_macos-x64_bin.tar.gz"
+tar -xzf graalvm.tar.gz
+
+# 构建 Native Image
+JAVA_HOME=~/.jdks/graalvm-community-openjdk-21.0.2+13.1 mvn -Pnative package -DskipTests
+```
+
+#### macOS (Apple Silicon aarch64)
+
+```bash
+# 安装 GraalVM
+cd ~/.jdks
+curl -L -o graalvm.tar.gz "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_macos-aarch64_bin.tar.gz"
+tar -xzf graalvm.tar.gz
+
+# 构建 Native Image
+JAVA_HOME=~/.jdks/graalvm-community-openjdk-21.0.2+13.1 mvn -Pnative package -DskipTests
+```
+
+#### Windows (x64)
+
+```powershell
+# PowerShell 中安装 GraalVM
+cd $env:USERPROFILE\.jdks
+Invoke-WebRequest -Uri "https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-21.0.2/graalvm-community-jdk-21.0.2_windows-x64_bin.zip" -OutFile "graalvm.zip"
+Expand-Archive -Path "graalvm.zip" -DestinationPath "." -Force
+
+# 构建 Native Image (需在 Visual Studio Developer Command Prompt 或已配置 cl.exe 的环境中运行)
+$env:JAVA_HOME = "$env:USERPROFILE\.jdks\graalvm-community-openjdk-21.0.2+13.1"
+mvn -Pnative package -DskipTests
+```
+
+> **Windows 注意事项**: Native Image 构建需要 Microsoft Visual Studio (MSVC) 工具链。请确保:
+> 1. 安装 Visual Studio 2019+ 并包含 C++ 开发工具
+> 2. 在 "x64 Native Tools Command Prompt for VS" 中执行构建命令
+> 3. 或确保 `cl.exe` 已加入 PATH 环境变量
 
 ## 使用示例
 
