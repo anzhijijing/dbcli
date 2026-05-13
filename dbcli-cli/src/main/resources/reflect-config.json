@@ -785,7 +785,7 @@
   "allDeclaredFields":true,
   "allDeclaredConstructors":true,
   "queryAllDeclaredMethods":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"getSchemas","parameterTypes":[] }, {"name":"getTables","parameterTypes":[] }, {"name":"getColumns","parameterTypes":[] }, {"name":"setSchemas","parameterTypes":["java.util.List"] }, {"name":"setTables","parameterTypes":["java.util.List"] }, {"name":"setColumns","parameterTypes":["java.util.List"] }]
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"getKeyword","parameterTypes":[] }, {"name":"getSchemas","parameterTypes":[] }, {"name":"getTables","parameterTypes":[] }, {"name":"getColumns","parameterTypes":[] }, {"name":"setKeyword","parameterTypes":["java.lang.String"] }, {"name":"setSchemas","parameterTypes":["java.util.List"] }, {"name":"setTables","parameterTypes":["java.util.List"] }, {"name":"setColumns","parameterTypes":["java.util.List"] }]
 },
 {
   "name":"ai.dbcli.core.SearchOptions",
