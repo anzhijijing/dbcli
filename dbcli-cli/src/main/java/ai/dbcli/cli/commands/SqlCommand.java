@@ -3,7 +3,6 @@ package ai.dbcli.cli.commands;
 import ai.dbcli.cli.DbCli;
 import ai.dbcli.core.*;
 import ai.dbcli.dialect.SqlValidateResult;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
@@ -66,8 +65,7 @@ public class SqlCommand implements Runnable {
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    System.out.println(mapper.writeValueAsString(formatter.success(result)));
+                    System.out.println(formatter.formatJson(formatter.success(result)));
                 } else {
                     if (result.getColumns() != null && !result.getColumns().isEmpty()) {
                         System.out.println(formatter.formatTable(result));
@@ -82,11 +80,8 @@ public class SqlCommand implements Runnable {
                 
                 // Output error as JSON if json mode
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    OutputFormatter formatter = new OutputFormatter();
-                    try {
-                        System.out.println(mapper.writeValueAsString(formatter.error("EXECUTION_ERROR", e.getMessage())));
-                    } catch (Exception ignored) {}
+                        OutputFormatter formatter2 = new OutputFormatter();
+                        System.out.println(formatter2.formatJson(formatter2.error("EXECUTION_ERROR", e.getMessage())));
                 }
                 
                 return 1;
@@ -112,8 +107,7 @@ public class SqlCommand implements Runnable {
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    System.out.println(mapper.writeValueAsString(formatter.success(result)));
+                    System.out.println(formatter.formatJson(formatter.success(result)));
                 } else {
                     System.out.println("Valid: " + result.isValid());
                     System.out.println("SQL type: " + result.getSqlType());
@@ -155,11 +149,7 @@ public class SqlCommand implements Runnable {
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    ApiResponse response = new ApiResponse();
-                    response.setSuccess(true);
-                    response.setData(formatted);
-                    System.out.println(mapper.writeValueAsString(response));
+                    System.out.println(formatter.formatJson(formatter.success(formatted)));
                 } else {
                     System.out.println(formatted);
                 }
@@ -196,8 +186,7 @@ public class SqlCommand implements Runnable {
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    System.out.println(mapper.writeValueAsString(formatter.success(result)));
+                    System.out.println(formatter.formatJson(formatter.success(result)));
                 } else {
                     System.out.println(formatter.formatTable(result));
                 }

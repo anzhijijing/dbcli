@@ -3,7 +3,6 @@ package ai.dbcli.cli.commands;
 import ai.dbcli.cli.DbCli;
 import ai.dbcli.core.*;
 import ai.dbcli.dialect.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
@@ -53,8 +52,7 @@ public class SearchCommand implements Callable<Integer> {
             OutputFormatter formatter = new OutputFormatter(parent.getOutputFormat());
             
             if (parent.getOutputFormat().equals("json")) {
-                ObjectMapper mapper = new ObjectMapper();
-                System.out.println(mapper.writeValueAsString(formatter.success(result)));
+                System.out.println(formatter.formatJson(formatter.success(result)));
             } else {
                 System.out.println("Search results for: " + keyword);
                 System.out.println();

@@ -3,7 +3,6 @@ package ai.dbcli.cli.commands;
 import ai.dbcli.cli.DbCli;
 import ai.dbcli.core.*;
 import ai.dbcli.jdbc.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
@@ -102,8 +101,7 @@ public class DatasourceCommand implements Runnable {
                 }
                 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    System.out.println(mapper.writeValueAsString(response));
+                    System.out.println(formatter.formatJson(response));
                 }
                 
                 return connected ? 0 : 1;
@@ -129,8 +127,7 @@ public class DatasourceCommand implements Runnable {
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    System.out.println(mapper.writeValueAsString(formatter.success(datasources)));
+                    System.out.println(formatter.formatJson(formatter.success(datasources)));
                 } else {
                     System.out.println(formatter.formatList(datasources, new String[]{"name", "type", "host", "database"}));
                 }
@@ -166,8 +163,7 @@ public class DatasourceCommand implements Runnable {
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    System.out.println(mapper.writeValueAsString(formatter.success(config)));
+                    System.out.println(formatter.formatJson(formatter.success(config)));
                 } else {
                     System.out.println("Name: " + config.getName());
                     System.out.println("Type: " + config.getType());
@@ -226,29 +222,20 @@ public class DatasourceCommand implements Runnable {
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    ApiResponse response = new ApiResponse();
-
                     if (config == null) {
-                        response.setSuccess(false);
-                        response.setErrorCode("DATASOURCE_NOT_FOUND");
-                        response.setMessage("Datasource '" + name + "' not found");
-                        response.setData(null);
-                        System.out.println(mapper.writeValueAsString(response));
+                        System.out.println(formatter.formatJson(formatter.error("DATASOURCE_NOT_FOUND", "Datasource '" + name + "' not found")));
                         return 1;
                     }
 
                     boolean connected = engine.pingDatasource(name);
                     if (!connected) {
-                        response.setSuccess(false);
-                        response.setErrorCode("CONNECTION_FAILED");
-                        response.setMessage("Failed to connect to datasource '" + name + "'");
-                        response.setData("disconnected");
+                        System.out.println(formatter.formatJson(formatter.error("CONNECTION_FAILED", "Failed to connect to datasource '" + name + "'")));
                     } else {
+                        ApiResponse response = new ApiResponse();
                         response.setSuccess(true);
                         response.setData("connected");
+                        System.out.println(formatter.formatJson(response));
                     }
-                    System.out.println(mapper.writeValueAsString(response));
                     return connected ? 0 : 1;
                 } else {
                     if (config == null) {

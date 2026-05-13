@@ -4,7 +4,6 @@ import ai.dbcli.cli.DbCli;
 import ai.dbcli.core.*;
 import ai.dbcli.dialect.SchemaMeta;
 import ai.dbcli.jdbc.DatasourceConfig;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
@@ -50,8 +49,7 @@ public class SchemaCommand implements Runnable {
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    System.out.println(mapper.writeValueAsString(formatter.success(schemas)));
+                    System.out.println(formatter.formatJson(formatter.success(schemas)));
                 } else {
                     System.out.println(formatter.formatList(schemas, new String[]{"name", "tableCount"}));
                 }
@@ -87,12 +85,7 @@ public class SchemaCommand implements Runnable {
                 if (dsConfig == null) {
                     OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                     if (parent.parent.getOutputFormat().equals("json")) {
-                        ObjectMapper mapper = new ObjectMapper();
-                        ApiResponse response = new ApiResponse();
-                        response.setSuccess(false);
-                        response.setErrorCode("DATASOURCE_NOT_FOUND");
-                        response.setMessage("Datasource '" + datasource + "' not found");
-                        System.out.println(mapper.writeValueAsString(response));
+                        System.out.println(formatter.formatJson(formatter.error("DATASOURCE_NOT_FOUND", "Datasource '" + datasource + "' not found")));
                     } else {
                         System.err.println("Datasource '" + datasource + "' not found");
                     }
@@ -107,12 +100,7 @@ public class SchemaCommand implements Runnable {
                 if (!schemaExists) {
                     OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                     if (parent.parent.getOutputFormat().equals("json")) {
-                        ObjectMapper mapper = new ObjectMapper();
-                        ApiResponse response = new ApiResponse();
-                        response.setSuccess(false);
-                        response.setErrorCode("SCHEMA_NOT_FOUND");
-                        response.setMessage("Schema '" + schemaName + "' not found in datasource '" + datasource + "'");
-                        System.out.println(mapper.writeValueAsString(response));
+                        System.out.println(formatter.formatJson(formatter.error("SCHEMA_NOT_FOUND", "Schema '" + schemaName + "' not found in datasource '" + datasource + "'")));
                     } else {
                         System.err.println("Schema '" + schemaName + "' not found");
                     }
@@ -124,8 +112,7 @@ public class SchemaCommand implements Runnable {
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    System.out.println(mapper.writeValueAsString(formatter.success(meta)));
+                    System.out.println(formatter.formatJson(formatter.success(meta)));
                 } else {
                     System.out.println("Schema: " + meta.getName());
                     System.out.println("Datasource: " + meta.getDatasource());
@@ -166,8 +153,7 @@ public class SchemaCommand implements Runnable {
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    System.out.println(mapper.writeValueAsString(formatter.success(filtered)));
+                    System.out.println(formatter.formatJson(formatter.success(filtered)));
                 } else {
                     System.out.println(formatter.formatList(filtered, new String[]{"name", "tableCount"}));
                 }

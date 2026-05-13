@@ -4,7 +4,6 @@ import ai.dbcli.cli.DbCli;
 import ai.dbcli.core.*;
 import ai.dbcli.dialect.*;
 import ai.dbcli.jdbc.DatasourceConfig;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
@@ -69,8 +68,7 @@ public class TableCommand implements Runnable {
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    System.out.println(mapper.writeValueAsString(formatter.success(tables)));
+                    System.out.println(formatter.formatJson(formatter.success(tables)));
                 } else {
                     System.out.println(formatter.formatList(tables, new String[]{"tableName", "tableType", "comment", "rowCount"}));
                 }
@@ -107,12 +105,7 @@ public class TableCommand implements Runnable {
                 if (dsConfig == null) {
                     OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                     if (parent.parent.getOutputFormat().equals("json")) {
-                        ObjectMapper mapper = new ObjectMapper();
-                        ApiResponse response = new ApiResponse();
-                        response.setSuccess(false);
-                        response.setErrorCode("DATASOURCE_NOT_FOUND");
-                        response.setMessage("Datasource '" + datasource + "' not found");
-                        System.out.println(mapper.writeValueAsString(response));
+                        System.out.println(formatter.formatJson(formatter.error("DATASOURCE_NOT_FOUND", "Datasource '" + datasource + "' not found")));
                     } else {
                         System.err.println("Datasource '" + datasource + "' not found");
                     }
@@ -127,12 +120,7 @@ public class TableCommand implements Runnable {
                 if (!tableExists) {
                     OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                     if (parent.parent.getOutputFormat().equals("json")) {
-                        ObjectMapper mapper = new ObjectMapper();
-                        ApiResponse response = new ApiResponse();
-                        response.setSuccess(false);
-                        response.setErrorCode("TABLE_NOT_FOUND");
-                        response.setMessage("Table '" + table + "' not found in schema '" + schema + "'");
-                        System.out.println(mapper.writeValueAsString(response));
+                        System.out.println(formatter.formatJson(formatter.error("TABLE_NOT_FOUND", "Table '" + table + "' not found in schema '" + schema + "'")));
                     } else {
                         System.err.println("Table '" + table + "' not found");
                     }
@@ -144,8 +132,7 @@ public class TableCommand implements Runnable {
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    System.out.println(mapper.writeValueAsString(formatter.success(meta)));
+                    System.out.println(formatter.formatJson(formatter.success(meta)));
                 } else {
                     System.out.println("Table: " + meta.getTableName());
                     System.out.println("Schema: " + meta.getSchema());
@@ -197,8 +184,7 @@ public class TableCommand implements Runnable {
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    System.out.println(mapper.writeValueAsString(formatter.success(tables)));
+                    System.out.println(formatter.formatJson(formatter.success(tables)));
                 } else {
                     System.out.println(formatter.formatList(tables, new String[]{"tableName", "tableType", "comment"}));
                 }
@@ -234,11 +220,7 @@ public class TableCommand implements Runnable {
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    ApiResponse response = new ApiResponse();
-                    response.setSuccess(true);
-                    response.setData(ddl);
-                    System.out.println(mapper.writeValueAsString(response));
+                    System.out.println(formatter.formatJson(formatter.success(ddl)));
                 } else {
                     System.out.println(ddl);
                 }
@@ -274,8 +256,7 @@ public class TableCommand implements Runnable {
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    System.out.println(mapper.writeValueAsString(formatter.success(stats)));
+                    System.out.println(formatter.formatJson(formatter.success(stats)));
                 } else {
                     System.out.println("Row count: " + stats.getRowCount());
                     System.out.println("Data size: " + formatSize(stats.getDataSize()));
@@ -322,8 +303,7 @@ public class TableCommand implements Runnable {
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    System.out.println(mapper.writeValueAsString(formatter.success(indexes)));
+                    System.out.println(formatter.formatJson(formatter.success(indexes)));
                 } else {
                     System.out.println(formatter.formatList(indexes, new String[]{"name", "type", "unique", "primary", "columns"}));
                 }
@@ -359,8 +339,7 @@ public class TableCommand implements Runnable {
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    System.out.println(mapper.writeValueAsString(formatter.success(fks)));
+                    System.out.println(formatter.formatJson(formatter.success(fks)));
                 } else {
                     System.out.println(formatter.formatList(fks, 
                         new String[]{"name", "columnName", "refTable", "refColumn", "onDelete"}));

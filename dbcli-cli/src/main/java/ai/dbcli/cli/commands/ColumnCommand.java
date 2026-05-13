@@ -3,7 +3,6 @@ package ai.dbcli.cli.commands;
 import ai.dbcli.cli.DbCli;
 import ai.dbcli.core.*;
 import ai.dbcli.dialect.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
@@ -63,8 +62,7 @@ public class ColumnCommand implements Runnable {
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    System.out.println(mapper.writeValueAsString(formatter.success(columns)));
+                    System.out.println(formatter.formatJson(formatter.success(columns)));
                 } else {
                     System.out.println(formatter.formatList(columns, 
                         new String[]{"name", "type", "nullable", "primaryKey", "comment"}));
@@ -102,8 +100,7 @@ public class ColumnCommand implements Runnable {
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    System.out.println(mapper.writeValueAsString(formatter.success(columns)));
+                    System.out.println(formatter.formatJson(formatter.success(columns)));
                 } else {
                     System.out.println(formatter.formatList(columns, 
                         new String[]{"name", "type", "nullable", "primaryKey", "comment"}));
@@ -154,8 +151,7 @@ public class ColumnCommand implements Runnable {
                 OutputFormatter formatter = new OutputFormatter(parent.parent.getOutputFormat());
                 
                 if (parent.parent.getOutputFormat().equals("json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    System.out.println(mapper.writeValueAsString(formatter.success(colMeta)));
+                    System.out.println(formatter.formatJson(formatter.success(colMeta)));
                 } else {
                     System.out.println("Name: " + colMeta.getName());
                     System.out.println("Type: " + colMeta.getType());
