@@ -49,9 +49,10 @@ public class MetadataEngine {
     }
 
     /**
-     * Get connection for datasource
+     * Get connection for datasource；连接池按需懒创建：只有真正要访问该数据源时才建池，
+     * config.yaml 中其他不可达的数据源不会被触碰
      */
-    private Connection getConnection(String datasource) {
+    public Connection getConnection(String datasource) {
         DatasourceConfig config = configManager.getDatasource(datasource);
         if (config == null) {
             throw new RuntimeException("Datasource '" + datasource + "' not found");
@@ -133,9 +134,21 @@ public class MetadataEngine {
     }
 
     /**
-     * Test datasource connection
+     * Test datasource connection；按需为该数据源建池后再测试，
+     * 不会影响 config.yaml 中其他数据源
      */
     public boolean pingDatasource(String name) {
+        DatasourceConfig config = configManager.getDatasource(name);
+        // 数据源未配置时直接报错，避免对不存在的配置做连接测试
+        if (config == null) {
+            throw new RuntimeException("Datasource '" + name + "' not found");
+        }
+
+        // 池不存在时按需创建，保证独立进程内的 ping 命令可用
+        if (!ConnectionPoolManager.hasPool(name)) {
+            ConnectionPoolManager.getOrCreatePool(config);
+        }
+
         return ConnectionPoolManager.ping(name);
     }
 

@@ -49,8 +49,6 @@ public class ConfigManager {
                 for (Map.Entry<String, Map<String, Object>> entry : dsMap.entrySet()) {
                     DatasourceConfig ds = parseDatasourceConfig(entry.getKey(), entry.getValue());
                     datasources.put(entry.getKey(), ds);
-                    // Initialize connection pool for loaded datasource
-                    ConnectionPoolManager.getOrCreatePool(ds);
                 }
             }
         } catch (IOException e) {

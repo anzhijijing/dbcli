@@ -62,10 +62,7 @@ public class ExecutionEngine {
         result.setSqlType(validation.getSqlType());
         result.setWarnings(validation.getWarnings());
 
-        try (Connection conn = metadataEngine.getConfigManager().hasDatasource(datasource) ?
-                ConnectionPoolManager.getConnection(datasource) :
-                throwNotFound(datasource)) {
-            
+        try (Connection conn = metadataEngine.getConnection(datasource)) {
             // Set schema if needed
             if (schema != null) {
                 try {
@@ -202,7 +199,7 @@ public class ExecutionEngine {
             throw new RuntimeException("SQL validation failed: " + validation.getMessage());
         }
 
-        try (Connection conn = ConnectionPoolManager.getConnection(datasource)) {
+        try (Connection conn = metadataEngine.getConnection(datasource)) {
             if (schema != null) {
                 try {
                     conn.setSchema(schema);
@@ -253,7 +250,7 @@ public class ExecutionEngine {
             throw new RuntimeException("SQL validation failed: " + validation.getMessage());
         }
 
-        try (Connection conn = ConnectionPoolManager.getConnection(datasource)) {
+        try (Connection conn = metadataEngine.getConnection(datasource)) {
             if (schema != null) {
                 try {
                     conn.setSchema(schema);
@@ -292,7 +289,7 @@ public class ExecutionEngine {
             throw new RuntimeException("SQL validation failed: " + validation.getMessage());
         }
 
-        try (Connection conn = ConnectionPoolManager.getConnection(datasource)) {
+        try (Connection conn = metadataEngine.getConnection(datasource)) {
             if (schema != null) {
                 try {
                     conn.setSchema(schema);
@@ -315,10 +312,6 @@ public class ExecutionEngine {
     public QueryResult explain(String datasource, String schema, String sql) {
         String explainSql = "EXPLAIN " + sql;
         return executeQuery(datasource, schema, explainSql, 100);
-    }
-
-    private Connection throwNotFound(String datasource) throws SQLException {
-        throw new SQLException("Datasource '" + datasource + "' not found");
     }
 
     public int getDefaultMaxRows() {
